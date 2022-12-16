@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image found</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.15.18/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.15.18/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.15.18/dist/js/uikit-icons.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+</head>
+<body>
+    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+        {% set e = 0 %}
+        {% for image in nameI %}
+            <div class="grid-item"><img src="/static/{{image}}" width="400" height="600" alt=""><h3>{{image}} ({{prob[loop.index]}})</h3></div>
+        {% endfor %}
+    </div>
+    <h3><a href="{{url_for('page')}}">Back to main menu</a></h3>
+</body>
+</html>
