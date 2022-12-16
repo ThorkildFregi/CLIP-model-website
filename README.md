@@ -23,3 +23,5 @@ After, verify you are in the same folder as ```main.py``` in your terminal and t
 Then go on ```https://127.0.0.1/``` and have fun !
 
 You can use the code for your proper images in changing the images in the folder ```static``` and relaunch the ```model.py```.
+
+Thanks to Jean-Philippe Moreux for the help !
