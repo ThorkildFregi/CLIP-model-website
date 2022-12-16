@@ -20,7 +20,7 @@ Before launching the website, run the ```model.py``` you will view a ```torch.pt
 
 After, verify you are in the same folder as ```main.py``` in your terminal and type : ```flask --app main.py run``` or ```flask --app main.py --debug run``` if you want the debug mode.
 
-Then go on ```https://127.0.0.1/``` and have fun !
+Then go on ```http://127.0.0.1/``` and have fun !
 
 You can use the code for your proper images in changing the images in the folder ```static``` and rerun the ```model.py```.
 
