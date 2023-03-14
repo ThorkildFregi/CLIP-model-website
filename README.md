@@ -25,3 +25,5 @@ Then go on ```http://127.0.0.1/``` and have fun !
 You can use the code for your proper images in changing the images in the folder ```static``` and rerun the ```model.py```.
 
 Thanks to Jean-Philippe Moreux for the help !
+
+Remix version by Altomator : https://github.com/altomator/CLIP_test/
