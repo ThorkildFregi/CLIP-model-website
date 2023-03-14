@@ -26,4 +26,4 @@ You can use the code for your proper images in changing the images in the folder
 
 Thanks to Jean-Philippe Moreux for the help !
 
-Remix version by Altomator : https://github.com/altomator/CLIP_test/
+Remix version by Jean-Philippe Moreux : https://github.com/altomator/CLIP_test/
