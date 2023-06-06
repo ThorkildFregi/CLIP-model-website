@@ -4,7 +4,7 @@
 
 **Presentation**
 
-A website combining CLIP, Masonry, Flask and UIkit using old image from Gallica during the WWI.
+A website combining CLIP, Masonry, Flask and UIkit using old image from Gallica during the WWI. The actual version is V1
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
