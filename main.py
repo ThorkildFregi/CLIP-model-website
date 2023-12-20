@@ -93,6 +93,11 @@ def home():
     else:
         return redirect(url_for("changeImages"))
 
+@app.route('/initialise-model', methods=("POST", "GET"))
+def Initialise_Model():
+    InitialiseModel()
+    return redirect(url_for("home"))
+
 @app.route('/change-image', methods=("POST", "GET"))
 def changeImages():
     if request.method == "POST":
