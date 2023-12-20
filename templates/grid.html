@@ -12,9 +12,9 @@
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
         {% set e = 0 %}
         {% for image in nameI %}
-            <div class="grid-item"><img src="/static/{{image}}" width="400" height="600" alt=""><h3>{{image}} ({{prob[loop.index]}})</h3></div>
+            <div class="grid-item"><img src="/static/{{image}}" width="400" height="600" alt=""><h3>{{image}} ({{prob[e]}})</h3></div>
         {% endfor %}
     </div>
-    <h3><a href="{{url_for('page')}}">Back to main menu</a></h3>
+    <h3><a href="{{url_for('home')}}">Back to main menu</a></h3>
 </body>
 </html>
