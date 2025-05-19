@@ -1,12 +1,12 @@
-# import
-import numpy as np
-import torch
-import os
 from PIL import Image
-import clip
+import numpy as np
 import pathlib
+import torch
+import clip
+import os
 
 def InitialiseModel():
+    device = torch.device("cuda")
 
     # image folder
     img_folder = "static/"
@@ -25,6 +25,7 @@ def InitialiseModel():
 
     # loading model
     model, preprocess = clip.load("ViT-B/32")
+    model.to(device)
     model.eval()
     input_resolution = model.visual.input_resolution
     context_length = model.context_length
@@ -39,7 +40,7 @@ def InitialiseModel():
     preprocess
 
     # text preprocessing
-    clip.tokenize("Hello world!")
+    clip.tokenize("Hello world!").to(device)
 
     listdir = os.listdir(img_folder)
 
@@ -58,7 +59,7 @@ def InitialiseModel():
             images.append(preprocess(image))
             i += 1
 
-        image_input = torch.tensor(np.stack(images))
+        image_input = torch.tensor(np.stack(images)).to(device)
 
         with torch.no_grad():
             image_features = model.encode_image(image_input).float()

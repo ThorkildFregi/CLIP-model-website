@@ -1,7 +1,7 @@
 from flask import Flask, redirect, request, url_for, render_template
 from model import InitialiseModel
-from PIL import Image
 from tqdm import tqdm
+from PIL import Image
 import pathlib
 import shutil
 import torch
@@ -14,15 +14,15 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+device = torch.device("cuda")
+
 model, preprocess = clip.load("ViT-B/32")
+model.to(device)
 model.eval()
+
 input_resolution = model.visual.input_resolution
 context_length = model.context_length
 vocab_size = model.vocab_size
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=("POST", "GET"))
 def home():
@@ -39,7 +39,7 @@ def home():
             nameI = []
             i = 0
 
-            clip.tokenize("Hello world!")
+            clip.tokenize("Hello world!").to(device)
 
             preprocess
 
@@ -57,14 +57,14 @@ def home():
             descriptions.append(request.form["prompt"])
 
             text_descriptions = [f"This is a photo of a {label}" for label in descriptions]
-            text_tokens = clip.tokenize(text_descriptions)
+            text_tokens = clip.tokenize(text_descriptions).to(device)
 
             with torch.no_grad():
                 text_features = model.encode_text(text_tokens).float()
                 text_features /= text_features.norm(dim=-1, keepdim=True)
 
             # load toarch image_features from model.py
-            image_features = torch.load("tensor.pt")
+            image_features = torch.load("tensor.pt").to(device)
 
             # top probability
             text_probs = (100.0 * image_features @ text_features.T).softmax(dim=-1)
