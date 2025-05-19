@@ -5,11 +5,11 @@ import torch
 import clip
 import os
 
-def InitialiseModel():
+def InitialiseModel(dataset: str):
     device = torch.device("cuda")
 
     # image folder
-    img_folder = "static/"
+    img_folder = f"static/{dataset}/"
 
     # read image
     print(" reading ", img_folder)
@@ -67,6 +67,6 @@ def InitialiseModel():
             # calculating cosine similarity
             image_features /= image_features.norm(dim=-1, keepdim=True)
 
-        torch.save(image_features, "tensor.pt")
+        torch.save(image_features, f"{dataset}_tensor.pt")
     else:
         print("no image")

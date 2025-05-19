@@ -3,12 +3,11 @@ from model import InitialiseModel
 from tqdm import tqdm
 from PIL import Image
 import pathlib
-import shutil
 import torch
 import clip
 import os
 
-UPLOAD_FOLDER = '/static'
+UPLOAD_FOLDER = 'static/'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
@@ -26,11 +25,12 @@ vocab_size = model.vocab_size
 
 @app.route('/', methods=("POST", "GET"))
 def home():
+    dataset = request.args.get("dataset", default="gallica_wwi")
     listdir = os.listdir('static/')
 
     if listdir:
         if request.method == "POST":
-            img_folder = "static/"
+            img_folder = f"static/{dataset}"
 
             data_dir = pathlib.Path(img_folder)
 
@@ -64,7 +64,7 @@ def home():
                 text_features /= text_features.norm(dim=-1, keepdim=True)
 
             # load toarch image_features from model.py
-            image_features = torch.load("tensor.pt").to(device)
+            image_features = torch.load(f"{dataset}_tensor.pt").to(device)
 
             # top probability
             text_probs = (100.0 * image_features @ text_features.T).softmax(dim=-1)
@@ -79,47 +79,37 @@ def home():
                     nameImageTopProb.append(nameI[i])
                     prob.append(float(top_probs[i][0]))
 
-            print(prob)
-
             return render_template("grid.html", nameI=nameImageTopProb, prob=prob)
         else:
-            start = "static/"
+            start = f"static/{dataset}"
 
             for dirpath, dirnames, filenames in os.walk(start):
                 if filenames:
-                    return render_template("home.html", nameI=filenames)  # nameI=nameImg)
+                    return render_template("home.html", listdataset=listdir, dataset=dataset, nameI=filenames)
                 else:
-                    return redirect(url_for("changeImages"))
+                    return redirect(url_for("add_dataset"))
     else:
-        return redirect(url_for("changeImages"))
+        return redirect(url_for("add_dataset"))
 
-@app.route('/initialise-model', methods=("POST", "GET"))
-def Initialise_Model():
-    InitialiseModel()
-    return redirect(url_for("home"))
-
-@app.route('/change-image', methods=("POST", "GET"))
-def changeImages():
+@app.route('/add-dataset', methods=("POST", "GET"))
+def add_dataset():
     if request.method == "POST":
-        folder = 'static/'
-        for filename in os.listdir(folder):
-            file_path = os.path.join(folder, filename)
-            try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
+        name = request.form["name"]
+
+        for folder in os.listdir(UPLOAD_FOLDER):
+            if folder == name:
+                raise Exception("A folder is already named that way !")
+        
+        os.makedirs(f"static/{name}/")
 
         files = request.files.getlist("images")
         for file in files:
             image = Image.open(file)
-            image.save(f"static/{file.filename}")
-        InitialiseModel()
+            image.save(f"static/{name}/{file.filename}")
+        InitialiseModel(name)
         return redirect(url_for('home'))
     else:
-        return render_template("changeImages.html")
+        return render_template("addDataset.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860, debug=True)

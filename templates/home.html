@@ -9,18 +9,41 @@
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
 </head>
 <body>
-    <div class="uk-container-medium">
-        <form action="{{url_for('home')}}" method="post">
-            <input class="uk-input" type="text" name="prompt" placeholder="Prompt" id="prompt">
-            <button class="uk-button uk-button-default" type="submit">Submit</button>
-        </form>
-    </div>
-    <h3><a href="{{ url_for('changeImages') }}">Change image</a></h3>
-    <h3><a href="{{ url_for('Initialise_Model') }}">Initialise Model</a></h3>
+    <nav class="uk-navbar-container">
+        <div class="uk-container-expand">
+            <div uk-navbar>
+                <div class="uk-navbar-left">
+                    <ul class="uk-navbar-nav">
+                        <form action="{{url_for('home')}}" method="post" class="uk-form-horizontal">
+                            <div class="uk-inline">
+                                <input class="uk-input" type="text" name="prompt" placeholder="Prompt" id="prompt">
+                                <button class="uk-button uk-button-default" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </ul>
+                </div>
+                <div class="uk-navbar-right uk-margin-small-right">
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active"><a href="{{url_for('add_dataset')}}">Add Dataset</a></li>
+                        <li>
+                            <a href="#">Datasets</a>
+                            <div class="uk-navbar-dropdown">
+                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                    {% for ds in listdataset %}
+                                        <li class="uk-active"><a href="/?dataset={{ds}}">{{ds}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
     <br>
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item"}'>
         {% for image in nameI %}
-            <div class="grid-item"><img src="/static/{{image}}" width="100" height="200"></div>
+            <div class="grid-item"><img src="/static/{{dataset}}/{{image}}" width="100" height="200"></div>
         {% endfor %}
     </div>
 </body>
