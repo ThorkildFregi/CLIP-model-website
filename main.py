@@ -30,7 +30,7 @@ def home():
 
     if listdir:
         if request.method == "POST":
-            img_folder = f"static/{dataset}"
+            img_folder = f"static/{dataset}/"
 
             data_dir = pathlib.Path(img_folder)
 
@@ -79,7 +79,7 @@ def home():
                     nameImageTopProb.append(nameI[i])
                     prob.append(float(top_probs[i][0]))
 
-            return render_template("grid.html", nameI=nameImageTopProb, prob=prob)
+            return render_template("grid.html", dataset=dataset, nameI=nameImageTopProb, prob=prob)
         else:
             start = f"static/{dataset}"
 
@@ -95,6 +95,7 @@ def home():
 def add_dataset():
     if request.method == "POST":
         name = request.form["name"]
+        model = request.form["model"]
 
         for folder in os.listdir(UPLOAD_FOLDER):
             if folder == name:
@@ -106,10 +107,15 @@ def add_dataset():
         for file in files:
             image = Image.open(file)
             image.save(f"static/{name}/{file.filename}")
-        InitialiseModel(name)
+        InitialiseModel(name, model)
         return redirect(url_for('home'))
     else:
-        return render_template("addDataset.html")
+        listmodel = []
+        for model in clip.available_models():
+            if "ViT" in model:
+                listmodel.append(model)
+
+        return render_template("addDataset.html", listmodel=listmodel)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860, debug=True)

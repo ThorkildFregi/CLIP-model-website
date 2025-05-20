@@ -5,7 +5,7 @@ import torch
 import clip
 import os
 
-def InitialiseModel(dataset: str):
+def InitialiseModel(dataset: str, model: str = "ViT-B/32"):
     device = torch.device("cuda")
 
     # image folder
@@ -20,11 +20,8 @@ def InitialiseModel(dataset: str):
     # torch version
     print("Torch version:", torch.__version__)
 
-    # list clip model
-    clip.available_models()
-
     # loading model
-    model, preprocess = clip.load("ViT-B/32")
+    model, preprocess = clip.load(model)
     model.to(device)
     model.eval()
     input_resolution = model.visual.input_resolution
@@ -66,6 +63,7 @@ def InitialiseModel(dataset: str):
 
             # calculating cosine similarity
             image_features /= image_features.norm(dim=-1, keepdim=True)
+
 
         torch.save(image_features, f"{dataset}_tensor.pt")
     else:
